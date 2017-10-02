@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Switch } from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import Header from './containers/Header/Header';
+import HomeRoute from './routes/Home'
+import SignupRoute from './routes/Signup'
+import SigninRoute from './routes/Signin'
+import PollsRoute from './routes/Polls'
+
 import './App.css';
 
 class App extends Component {
@@ -11,6 +17,10 @@ class App extends Component {
           <div>
             <Header />
             <Switch>
+              <Route exact path="/" component={HomeRoute}/>
+              <Route path="/polls" component={PollsRoute}/>
+              <Route path="/signup" component={SignupRoute}/>
+              <Route path="/signin" component={SigninRoute}/>
             </Switch>
           </div>
         </Router>

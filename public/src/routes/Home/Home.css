@@ -1,0 +1,36 @@
+.Home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.Home-Hero {
+    color: #06d;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+    justify-content: center;
+    align-items: center
+}
+
+.Home-Hero > * {
+    margin: 50px 0;
+}
+
+.Home-Adverts {
+    flex-grow: 1;
+}
+
+.Home-Hero-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-around
+}
+
+.Home-Hero-buttons > div:first-child a {
+    color: #06d;
+}
+
+.Home-Hero-buttons > div:last-child a:last-child {
+    color: white;
+}

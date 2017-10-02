@@ -1,0 +1,25 @@
+.Signin {
+    display: grid;
+    grid-template-areas: ". . ."
+                         ". content ."
+                         ". . .";
+    grid-template-columns: 20px 1fr 20px;
+    grid-template-rows: 20px 1fr 20px;
+    height: 92vh;
+}
+
+.Signin-content {
+    grid-area: content;
+}
+
+.Signin-Form {
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.Signin-Form > * {
+    margin: 20px 0;
+}
