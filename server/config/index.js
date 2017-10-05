@@ -10,13 +10,15 @@ const userRouter = require('./routes/user')
 exports.configureApp = (app) => {
 
     app.use(cookieParser())
-    app.use(logger())
+    app.use(logger('dev'))
     app.use(bodyParser.json())
     app.use(express.static(resolve(__dirname, '..', '..', 'public', 'dist')))
 
     app.use('/api/authenticate', authenticationRouter)
     app.use('/api/users', userRouter)
-    app.user('/*', (req, res) => {
+    app.get('/*', (req, res) => {
         res.sendFile(resolve(__dirname, '..', '..', 'public', 'dist', 'index.html'))
     })
 }
+
+exports.sanitizeUser = ({displayName, username, _id}) => ({displayName, username, _id})

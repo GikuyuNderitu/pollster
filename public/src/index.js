@@ -13,13 +13,15 @@ import MTP from 'material-ui/styles/MuiThemeProvider';
 import gMT from 'material-ui/styles/getMuiTheme'
 
 const muiTheme = gMT({
+    palette: {
+        primary1Color: '#0196df',
+    },
     raisedButton: {
-        primaryColor: '#0196df',
         primaryTextColor: '#eee',
         secondaryColor: '#aaa'
     },
     toolbar: {
-        backgroundColor: "#06d",
+        // backgroundColor: "#06d",
         color: "#eee",
         hoverColor: "#fff",
         iconColor: "#fff"

@@ -18,6 +18,7 @@ import AddIcon from 'material-ui/svg-icons/content/add';
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import {ToolbarGroup, Toolbar, ToolbarTitle, ToolbarSeparator} from 'material-ui/Toolbar';
+import muiThemeable from 'material-ui/styles/muiThemeable'
 
 const menuIconStyle = {height: '36px', minWidth: '36px', color:'#fff'}
 const endToolBarStyle = {marginRight: '5px'}
@@ -46,6 +47,8 @@ class Header extends Component {
             open: false
         }
 
+        this.toolBarStyle = {backgroundColor: this.props.muiTheme.palette.primary1Color}
+
         this.toggleSideNav = this.toggleSideNav.bind(this);
     }
     toggleSideNav() {
@@ -54,7 +57,8 @@ class Header extends Component {
     render() {
         return (
             <header>
-                <Toolbar>
+                <Toolbar
+                    style={this.toolBarStyle}>
                     <ToolbarGroup>
                         <ToolbarTitle text="Pollster" />
                     </ToolbarGroup>
@@ -71,7 +75,8 @@ class Header extends Component {
                                 width={300}
                                 onRequestChange={(open) => this.setState({open})}
                                 open={this.state.open}>
-                                <Toolbar>
+                                <Toolbar
+                                    style={this.toolBarStyle}>
                                     <ToolbarGroup>
                                         <ToolbarTitle text="Menu"></ToolbarTitle>
                                     </ToolbarGroup>
@@ -120,4 +125,4 @@ class Header extends Component {
     }
 }
 
-export default Header;
+export default muiThemeable()(Header);

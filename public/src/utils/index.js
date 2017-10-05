@@ -16,7 +16,7 @@ const addBody = (options, body) => ({
 })
 export const fetchPost = (url, body, options) =>
     fetch(url, addBody(mergeOptions(POST_OPTIONS, options), body))
-    .then(res => Promise.resolve(JSON.parse(res)))
+    .then(res => res.json())
 
 //     const postOptions = 
 

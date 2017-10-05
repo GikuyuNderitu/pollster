@@ -5,5 +5,6 @@ import {
 } from './authEpic';
 
 export default combineEpics(
-    userRegisterEpic
+    userRegisterEpic,
+    userLoginEpic
 )

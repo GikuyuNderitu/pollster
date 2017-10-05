@@ -2,6 +2,7 @@
   "name": "public",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:1337",
   "dependencies": {
     "axios": "^0.16.2",
     "d3": "^4.10.2",

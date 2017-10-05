@@ -7,10 +7,11 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 import SendIcon from 'material-ui/svg-icons/content/send'
 
+import {handleAuthAttempt} from '../../state/actions/authAction'
 import './Signin.css'
 
 const initialState = {
-    email: '',
+    username: '',
     password: ''
 }
 
@@ -27,7 +28,7 @@ class Signin extends Component {
     }
     handleSubmit() {
         const formData = {...this.state}
-        console.log(formData);
+        this.props.login(formData)
         this.setState(initialState)
     }
     render() {
@@ -42,9 +43,9 @@ class Signin extends Component {
                     <form
                         className="Signin-Form" >
                         <TextField
-                            value={this.state.email}
-                            floatingLabelText="Email"
-                            onChange={(e, nVal) => this.setState({email: nVal})} />
+                            value={this.state.username}
+                            floatingLabelText="Username"
+                            onChange={(e, nVal) => this.setState({username: nVal})} />
                         <TextField
                             value={this.state.password} 
                             floatingLabelText="Password"
@@ -65,4 +66,11 @@ class Signin extends Component {
     }
 }
 
-export default Signin;
+const mDtP = dispatch => ({
+    login(payload) {
+        console.log('dispatching');
+        dispatch(handleAuthAttempt(payload))
+    }
+})
+
+export default connect(null, mDtP)(Signin);
