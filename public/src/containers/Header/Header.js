@@ -15,7 +15,6 @@ import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import PencilIcon from 'material-ui/svg-icons/content/create';
 import AddIcon from 'material-ui/svg-icons/content/add';
-import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import {ToolbarGroup, Toolbar, ToolbarTitle, ToolbarSeparator} from 'material-ui/Toolbar';
 import muiThemeable from 'material-ui/styles/muiThemeable'
@@ -78,7 +77,7 @@ class Header extends Component {
                                 <Toolbar
                                     style={this.toolBarStyle}>
                                     <ToolbarGroup>
-                                        <ToolbarTitle text="Menu"></ToolbarTitle>
+                                        <ToolbarTitle text="Menu" />
                                     </ToolbarGroup>
                                     <ToolbarGroup lastChild={true}>
                                         <FlatButton 

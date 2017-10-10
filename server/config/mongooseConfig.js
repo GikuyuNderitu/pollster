@@ -3,6 +3,7 @@ const fs = require('fs');
 const {resolve} = require('path');
 
 const MONGO_URI = 'mongodb://localhost/pollster_fcc' 
+mongoose.Promise = global.Promise
 mongoose.connect(MONGO_URI, {}, (err) => {
     console.log(`Connected to mongo on ${MONGO_URI}`);
 })

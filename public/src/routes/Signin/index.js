@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 
 import TextField from 'material-ui/TextField'
 import Paper from 'material-ui/Paper'
@@ -7,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 import SendIcon from 'material-ui/svg-icons/content/send'
 
-import {handleAuthAttempt} from '../../state/actions/authAction'
+import {handleLoginAttempt} from '../../state/actions/authAction'
 import './Signin.css'
 
 const initialState = {
@@ -24,15 +25,22 @@ class Signin extends Component {
     constructor(props) {
         super(props);
         this.state = {...initialState}
-        this.handleSubmit = this.handleSubmit.bind(this);
+
+        this.counter = 0;
     }
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault()
         const formData = {...this.state}
         this.props.login(formData)
+        this.resetState()
+    }
+
+    resetState() {
         this.setState(initialState)
     }
     render() {
         return (
+            !this.props.isAuthenticated ?
             <main className="Signin">
             
                 <Paper
@@ -58,19 +66,23 @@ class Signin extends Component {
                             style={{display: 'flex', justifyContent: 'space-around', alignItems: 'center'}}
                             primary={true}
                             icon={<SendIcon />}
-                            onClick={this.handleSubmit} />
+                            onClick={e => this.handleSubmit(e)} />
                     </form>
                 </Paper>
-            </main>
+            </main> :
+            <Redirect to="/polls"/>
         )
     }
 }
 
+const mStP = ({auth}) => ({
+    isAuthenticated: auth.isAuthenticated
+})
+
 const mDtP = dispatch => ({
     login(payload) {
-        console.log('dispatching');
-        dispatch(handleAuthAttempt(payload))
+        dispatch(handleLoginAttempt(payload))
     }
 })
 
-export default connect(null, mDtP)(Signin);
+export default connect(mStP, mDtP)(Signin);

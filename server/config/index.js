@@ -7,8 +7,7 @@ const {resolve} = require('path')
 const authenticationRouter = require('./routes/authentication')
 const userRouter = require('./routes/user')
 
-exports.configureApp = (app) => {
-
+exports.configureApp = (app) => {        
     app.use(cookieParser())
     app.use(logger('dev'))
     app.use(bodyParser.json())
@@ -20,5 +19,3 @@ exports.configureApp = (app) => {
         res.sendFile(resolve(__dirname, '..', '..', 'public', 'dist', 'index.html'))
     })
 }
-
-exports.sanitizeUser = ({displayName, username, _id}) => ({displayName, username, _id})

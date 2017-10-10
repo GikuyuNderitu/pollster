@@ -1,11 +1,7 @@
-const mongoose = require('mongoose'),
-    uniqueness = require('mongoose-beautiful-unique-validation'),
-    bcrypt = require('bcrypt'),
-    PASSWORD_REGEX = /^.{8,}$/
-
+const mongoose = require('mongoose')
 const saltRounds = 14
 
-const UserSchema = new mongoose.Schema({
+const PollSchema = new mongoose.Schema({
     username: {
         type: String,
         required:[true, "Username is required"],
@@ -40,28 +36,13 @@ const UserSchema = new mongoose.Schema({
     }
 })
 
-UserSchema.methods.login = function (password) {
+PollSchema.methods.login = function (password) {
 	const self = this
-	return new Promise((resolve, reject) => {
-		bcrypt.compare(password, self.password)
-		.then( res => {
-			if(!res) reject({msg: "I'm sorry, that password is not correct."})
-			else resolve()
-		})
-	})
 }
 
-UserSchema.pre('save', function (next) {
+PollSchema.pre('save', function (next) {
     let self = this
-    console.log(self);
-	bcrypt.hash(self.password, saltRounds)
-	.then( hash => {
-		self.password = hash
-		next();
-	})
 })
 
-UserSchema.plugin(uniqueness)
-
-mongoose.model('User', UserSchema)
-console.log('User Model loaded');
+mongoose.model('Poll', PollSchema)
+console.log('Poll Model loaded');

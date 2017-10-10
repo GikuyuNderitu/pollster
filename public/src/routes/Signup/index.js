@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 
 import TextField from 'material-ui/TextField'
 import Paper from 'material-ui/Paper'
@@ -8,6 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import SendIcon from 'material-ui/svg-icons/content/send'
 
 import './Signup.css'
+import {removeEmpties} from '../../utils'
 import {handleRegisterAttempt} from '../../state/actions/authAction'
 
 const initialState = {
@@ -15,6 +17,7 @@ const initialState = {
     password: '',
     password_confirmation: '',
     displayName: '',
+    validForm: true
 }
 
 const paperStyle = {
@@ -27,14 +30,23 @@ class SignUp extends Component {
         super(props);
         this.state = {...initialState}
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.checkFormValidation = this.checkFormValidation.bind(this);
     }
+
+    checkFormValidation() {
+        var result = Object.keys(this.state).every(key => key === 'validForm' || this.state[key].length > 0)
+        this.setState({validForm: !result})
+    }
+
     handleSubmit() {
-        const formData = {...this.state}
+        const formData = {...this.state, validForm: undefined}
         this.setState(initialState)
         this.props.register(formData)
     }
+
     render() {
         return (
+            !this.props.isAuthenticated ? 
             <main className="SignUp">
             
                 <Paper
@@ -47,22 +59,27 @@ class SignUp extends Component {
                         <TextField
                             value={this.state.displayName}
                             floatingLabelText="Display Name"
-                            onChange={(e, nVal) => this.setState({displayName: nVal})} />
+                            onChange={(e, nVal) => this.setState({displayName: nVal})} 
+                            onBlur={this.checkFormValidation} />
                         <TextField
                             value={this.state.username}
                             floatingLabelText="Username"
-                            onChange={(e, nVal) => this.setState({username: nVal})} />
+                            onChange={(e, nVal) => this.setState({username: nVal})} 
+                            onBlur={this.checkFormValidation} />
                         <TextField
                             value={this.state.password} 
                             floatingLabelText="Password"
-                            onChange={(e, nVal) => this.setState({password: nVal})} />
+                            onChange={(e, nVal) => this.setState({password: nVal})} 
+                            onBlur={this.checkFormValidation} />
                         
                         <TextField
                             value={this.state.password_confirmation} 
                             floatingLabelText="Confirm Password"
-                            onChange={(e, nVal) => this.setState({password_confirmation: nVal})} />
+                            onChange={(e, nVal) => this.setState({password_confirmation: nVal})} 
+                            onBlur={this.checkFormValidation} />
 
                         <RaisedButton 
+                            disabled={this.state.validForm}
                             label={'Submit'}
                             labelPosition={'before'}
                             labelStyle={{fontSize: '1.2em'}}
@@ -72,15 +89,24 @@ class SignUp extends Component {
                             onClick={this.handleSubmit} />
                     </form>
                 </Paper>
-            </main>
+            </main> :
+            <Redirect to="/polls" />
         )
     }
 }
 
+const mStP = ({auth}) => ({
+    isAuthenticated: auth.isAuthenticated
+})
+
 const mDtP = dispatch => ({
     register(payload) {
-        dispatch(handleRegisterAttempt(payload))
+        try {
+            dispatch(handleRegisterAttempt(removeEmpties(payload)));
+        } catch (error) {
+            console.error(error)
+        }
     }
 })
 
-export default connect(null, mDtP)(SignUp);
+export default connect(mStP, mDtP)(SignUp);
