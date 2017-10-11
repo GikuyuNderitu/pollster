@@ -111,6 +111,12 @@ class Header extends Component {
                                     containerElement={<Link to="/signin" />}
                                     onClick={this.toggleSideNav}
                                     primaryText="Sign In" />
+                                <Divider />
+                                <MenuItem 
+                                    rightIcon={<PencilIcon color="#d21" />}
+                                    containerElement={<Link to="/signin" />}
+                                    onClick={this.toggleSideNav}
+                                    primaryText="Logout" />
                             </Drawer>
                         </SmallScreen>
                         <Desktop>
