@@ -1,0 +1,7 @@
+.NewPoll {
+
+}
+
+.NewPoll > * {
+    width: 100%;
+}

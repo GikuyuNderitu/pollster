@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
+
+import {Card, CardHeader, CardText, CardActions} from 'material-ui/Card';
 import {List, ListItem} from 'material-ui/List';
 import {red600} from 'material-ui/styles/colors'
 import Paper from 'material-ui/Paper';
@@ -8,18 +10,23 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
+import DescIcon from 'material-ui/svg-icons/action/description'
+import ClearIcon from 'material-ui/svg-icons/content/clear';
 import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
 import AddCircleIcon from 'material-ui/svg-icons/content/add-circle-outline'
+import AddIcon from 'material-ui/svg-icons/content/add'
 
 import './AddQuote.css';
 
 const initialState = {
     options: [],
+    description: '',
     name: '',
     newOption: '',
     nameError: '',
     newOptionError: '',
-    validForm: false
+    validForm: false,
+    expanded: false
 }
 
 const newPollStyle = {
@@ -146,41 +153,59 @@ class NewPoll extends Component {
 
     render() {
         return (
-            <Paper 
+            <Card 
                 className="NewPoll"
                 style={newPollStyle} >
-                <h1 style={{margin:"5px 0"}} >Add a Poll</h1>
+                <CardHeader
+                    avatar={<DescIcon />}
+                    closeIcon={<AddIcon />}
+                    openIcon={<ClearIcon />}
+                    showExpandableButton={true}
+                    title={<h2 style={{margin: "5px 0", paddingLeft:"0"}}>Add a Poll</h2>} />
 
-                <TextField
-                    onBlur={this.checkNameError}
-                    onChange={(e, name) => this.setState({name})}
-                    value={this.state.name}           
-                    errorText={this.state.nameError}
-                    floatingLabelText="Poll Name" />
-                <List
-                    style={optionListStyle}>
-                    {this.renderListItems()}
-                </List>
+                <CardText
+                    expandable={true} >
+                    <TextField
+                        onBlur={this.checkNameError}
+                        onChange={(e, name) => this.setState({name})}
+                        value={this.state.name}           
+                        errorText={this.state.nameError}
+                        floatingLabelText="Poll Name" />
 
-                <TextField
-                    onBlur={this.checkOptionError}
-                    onChange={(e, newOption) => this.setState({newOption})}
-                    value={this.state.newOption}
-                    errorText={this.state.newOptionError}
-                    multiLine={true}
-                    floatingLabelText="Add an Option" />
+                    <TextField
+                        floatingLabelStyle={{left:'0',width: '100%'}}
+                        multiLine={true}
+                        onChange={(e, description) => this.setState({description})}
+                        value={this.state.description}
+                        floatingLabelFixed={true}
+                        floatingLabelText="Description (optional)" />
+                    <List
+                        style={optionListStyle}>
+                        {this.renderListItems()}
+                    </List>
 
-                <FlatButton
-                    label="Add Option"
-                    onClick={this.handleNewOption}
-                    style={{margin:"10px 0"}} />
+                    <TextField
+                        onBlur={this.checkOptionError}
+                        onChange={(e, newOption) => this.setState({newOption})}
+                        value={this.state.newOption}
+                        errorText={this.state.newOptionError}
+                        multiLine={true}
+                        floatingLabelText="Add an Option" />
 
-                <RaisedButton 
-                    primary={true}
-                    label="Create Poll"
-                    labelPosition="before"
-                    icon={<AddCircleIcon />} />
-            </Paper>
+                    <FlatButton
+                        label="Add Option"
+                        onClick={this.handleNewOption}
+                        style={{margin:"10px 0"}} />
+                </CardText>
+
+                <CardActions>
+                    <RaisedButton 
+                        primary={true}
+                        label="Create Poll"
+                        labelPosition="before"
+                        icon={<AddCircleIcon />} />
+                </CardActions>
+            </Card>
         )
     }
 }

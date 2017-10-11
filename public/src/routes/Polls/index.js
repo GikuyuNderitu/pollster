@@ -29,9 +29,17 @@ const Poll = (props) => (
     <Card
         style={pollStyle}>
         <CardHeader
+            actAsExpander={true}
+            showExpandableButton={true}
             title="Potential real Title" />
-        <CardTitle title="Poll Title Goes here" subtitle="Subtitle Goes here" />
-        <CardText>
+        <CardTitle 
+            expanded={props.expanded}
+            expandable={true} 
+            title="Poll Title Goes here" 
+            subtitle="Subtitle Goes here" />
+        <CardText
+            expanded={props.expanded}
+            expandable={true}>
             {`Poll Data goes here`}
         </CardText>
     </Card>
