@@ -11,9 +11,12 @@ import AddQuote from '../../components/AddQuote';
 import './Polls.css'
 
 const pollStyle = {
-    margin: '10px',
+    margin: '20px 10px',
     padding: '10px',
+    textAlign: 'left'
 }
+
+
 
 const times = (num, arr=[]) => {
     for(let i = 0; i < num; i++) {
