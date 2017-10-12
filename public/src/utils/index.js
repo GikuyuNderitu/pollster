@@ -48,3 +48,10 @@ export const removeEmpties = (obj) => {
     if(Object.keys(newObject).length === 0) throw new Error("All fields are required")
     return newObject
 }
+
+export const times = (num, arr=[]) => {
+    for(let i = 0; i < num; i++) {
+        arr.push(i)
+    }
+    return arr
+}

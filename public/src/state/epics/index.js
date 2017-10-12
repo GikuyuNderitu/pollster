@@ -5,8 +5,14 @@ import {
     userLoginEpic,
 } from './authEpic';
 
+import {
+    pollCreateEpic
+} from './pollEpic'
+
 export default combineEpics(
     userAuthenticateEpic,
     userRegisterEpic,
-    userLoginEpic
+    userLoginEpic,
+
+    pollCreateEpic,
 )

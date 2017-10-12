@@ -6,6 +6,7 @@ const {resolve} = require('path')
 
 const authenticationRouter = require('./routes/authentication')
 const userRouter = require('./routes/user')
+const pollRouter = require('./routes/poll')
 
 exports.configureApp = (app) => {        
     app.use(cookieParser())
@@ -15,6 +16,7 @@ exports.configureApp = (app) => {
 
     app.use('/api/authenticate', authenticationRouter)
     app.use('/api/users', userRouter)
+    app.user('/api/polls', pollRouter)
     app.get('/*', (req, res) => {
         res.sendFile(resolve(__dirname, '..', '..', 'public', 'dist', 'index.html'))
     })

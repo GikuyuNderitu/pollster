@@ -18,6 +18,8 @@ import AddIcon from 'material-ui/svg-icons/content/add'
 
 import './AddQuote.css';
 
+import {handlePollCreateAttempt} from '../../state/actions/pollAction'
+
 const initialState = {
     options: [],
     description: '',
@@ -43,26 +45,6 @@ const optionListStyle = {
     textAlign: 'left'
 }
 
-const times = (num, arr=[]) => {
-    for(let i = 0; i < num; i++) {
-        arr.push(i)
-    }
-    return arr
-}
-
-const RemoveOption = (props) => (
-    <IconButton 
-        style={{textAlign: 'right'}}
-        tooltip="remove"
-        tooltipPosition="top-right">
-        <CancelIcon />
-    </IconButton>
-)
-
-// const Options = (props) => (
-    
-// )
-
 const NewOption = (props) => (
     <div>
     </div>
@@ -77,6 +59,16 @@ class NewPoll extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.checkNameError = this.checkNameError.bind(this);
         this.checkOptionError = this.checkOptionError.bind(this);
+        this.checkOptionSubmit = this.checkOptionSubmit.bind(this);
+        this.checkFormValidity = this.checkFormValidity.bind(this);
+        this.keymap = {}
+    }
+
+    checkOptionSubmit(e) {
+        if(e.key === "Enter") {
+            e.preventDefault();
+            this.handleNewOption()
+        }
     }
 
     checkNameError() {
@@ -87,13 +79,12 @@ class NewPoll extends Component {
             return
         }
 
-        this.setState({nameError: ''})
+        this.setState({nameError: ''}, this.checkFormValidity)
     }
 
     checkOptionError() {
         const {newOption, options} = this.state
 
-        console.log(newOption, options);
         if(newOption.trim().length === 0 && options.length <= 1) {
             this.setState({newOptionError: 'You must create at least two options'})
             return
@@ -103,22 +94,42 @@ class NewPoll extends Component {
     }
 
     checkFormValidity() {
-
+        const {newOptionError, nameError, validForm, options, name} = this.state
+        console.log(this.state);
+        
+        if(newOptionError.length === 0 && nameError.length === 0 && name.length >= 3 && options.length >1) {
+            this.setState({validForm: true})
+        } else {
+            this.setState({validForm: false})
+        }
     }
 
     handleNewOption() {
         const {newOption, options} = this.state
-        if(newOption.trim().length == 0) {
+        if(newOption.trim().length === 0) {
             return
         }
 
         const newOptions = [...options, newOption.trim()]
-        this.setState({options: newOptions, newOption: ''})
+        this.checkOptionError()
+        this.setState({options: newOptions, newOption: ''}, this.checkFormValidity)
     }
 
 
     handleSubmit() {
+        const pollData = this.getFormData()
 
+        this.props.makePoll(pollData)
+    }
+
+    getFormData() {
+        const {
+            options,
+            name,
+            description
+        } = this.state
+
+        return {options, name, description}
     }
 
     resetState() {
@@ -130,7 +141,9 @@ class NewPoll extends Component {
         e.preventDefault()
         const {options} = this.state
         options.splice(idx, 1)
-        this.setState({options})
+        this.setState({options}, this.checkFormValidity)
+        this.checkOptionError()
+        
     }
 
     renderListItems() {
@@ -164,7 +177,8 @@ class NewPoll extends Component {
                     title={<h2 style={{margin: "5px 0", paddingLeft:"0"}}>Add a Poll</h2>} />
 
                 <CardText
-                    expandable={true} >
+                    expandable={true}
+                    style={{display:'flex', flexDirection:'column', alignItems:'center'}} >
                     <TextField
                         onBlur={this.checkNameError}
                         onChange={(e, name) => this.setState({name})}
@@ -190,6 +204,7 @@ class NewPoll extends Component {
                         value={this.state.newOption}
                         errorText={this.state.newOptionError}
                         multiLine={true}
+                        onKeyDown={this.checkOptionSubmit}
                         floatingLabelText="Add an Option" />
 
                     <FlatButton
@@ -198,11 +213,14 @@ class NewPoll extends Component {
                         style={{margin:"10px 0"}} />
                 </CardText>
 
-                <CardActions>
-                    <RaisedButton 
+                <CardActions
+                    expandable={true} >
+                    <RaisedButton
+                        disabled={!this.state.validForm}
                         primary={true}
                         label="Create Poll"
                         labelPosition="before"
+                        onClick={this.handleSubmit}
                         icon={<AddCircleIcon />} />
                 </CardActions>
             </Card>
@@ -210,4 +228,15 @@ class NewPoll extends Component {
     }
 }
 
-export default NewPoll;
+const mStP = ({poll}) => ({
+    sendingPoll: poll.sendingPoll,
+    pollError: poll.pollError
+})
+
+const mDtP = dispatch => ({
+    makePoll(poll) {
+        dispatch(handlePollCreateAttempt(poll))
+    }
+})
+
+export default connect(mStP, mDtP)(NewPoll);
