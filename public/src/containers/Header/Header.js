@@ -114,7 +114,7 @@ class Header extends Component {
                                 <Divider />
                                 <MenuItem 
                                     rightIcon={<PencilIcon color="#d21" />}
-                                    containerElement={<Link to="/signin" />}
+                                    containerElement={<Link to="/logout" />}
                                     onClick={this.toggleSideNav}
                                     primaryText="Logout" />
                             </Drawer>

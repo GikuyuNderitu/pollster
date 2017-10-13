@@ -16,7 +16,7 @@ exports.configureApp = (app) => {
 
     app.use('/api/authenticate', authenticationRouter)
     app.use('/api/users', userRouter)
-    app.user('/api/polls', pollRouter)
+    app.use('/api/polls', pollRouter)
     app.get('/*', (req, res) => {
         res.sendFile(resolve(__dirname, '..', '..', 'public', 'dist', 'index.html'))
     })

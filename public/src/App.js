@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+
+import axios from 'axios'
 
 import {handleAuthAttempt} from './state/actions/authAction'
 
@@ -11,6 +13,22 @@ import SigninRoute from './routes/Signin'
 import PollsRoute from './routes/Polls'
 
 import './App.css';
+
+class Logout extends Component {
+  componentWillMount() {
+    axios.get('/api/authenticate/logout')
+    .then(data => {
+      console.log(data);
+    })
+    .catch(err => {
+      console.error(err)
+    })
+  }
+
+  render() {
+    return <Redirect to="/" />
+  }
+}
 
 class App extends Component {
   componentDidMount() {
@@ -27,6 +45,7 @@ class App extends Component {
               <Route path="/polls" component={PollsRoute}/>
               <Route path="/signup" component={SignupRoute}/>
               <Route path="/signin" component={SigninRoute}/>
+              <Route path="/logout" component={Logout}/>
             </Switch>
           </div>
         </Router>

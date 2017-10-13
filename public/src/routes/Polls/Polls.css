@@ -1,0 +1,8 @@
+.Poll-RadioButton-Container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.Poll-RadioButton-Container > * {
+    width: auto;
+}

@@ -95,7 +95,6 @@ class NewPoll extends Component {
 
     checkFormValidity() {
         const {newOptionError, nameError, validForm, options, name} = this.state
-        console.log(this.state);
         
         if(newOptionError.length === 0 && nameError.length === 0 && name.length >= 3 && options.length >1) {
             this.setState({validForm: true})
@@ -120,6 +119,7 @@ class NewPoll extends Component {
         const pollData = this.getFormData()
 
         this.props.makePoll(pollData)
+        this.resetState()
     }
 
     getFormData() {

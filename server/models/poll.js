@@ -1,48 +1,52 @@
 const mongoose = require('mongoose')
-const saltRounds = 14
 
-const PollSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required:[true, "Username is required"],
-        unique: 'Two users cannot share the same username'
-    },
-    displayName: {
-        type: String,
-        required: [false],
-        minlength: [3, "Display name must be at least 3 characters long"]
-    },
-    password:{
-        type: String,
-        required: [true, "Password field is required"],
-        minlength: [8, "I'm sorry, the password is shorter than the required length (8 characters)"],
-        validate: [{
-            validator: function (pass) {
-                return PASSWORD_REGEX.test(pass);
-            },
-            message: "`{ VALUE }` is not a valid password"
-        },{
-            validator: function (pass) {
-                return pass === this.password_confirmation
-            },
-            message: "The password and password confirmation don't match"
-        }]
-    }
 
-}, {
-    timestamps: {
-        createdAt: 'created_at',
-        updatedAt: 'updated_at'
+const Schema = mongoose.Schema
+
+const OptionSchema = new Schema({
+    option: {
+        type: String,
+        required: true,
+        minlength: [1, 'You must provide at least 1 character']
+    }, 
+    votes: {
+        type: Number,
+        default: 0
     }
 })
 
-PollSchema.methods.login = function (password) {
-	const self = this
-}
-
-PollSchema.pre('save', function (next) {
-    let self = this
+const PollSchema = new Schema({
+    name: {
+        type: String,
+        minlength: [3, "Poll must be 3 or more characters"],
+        required: [true, "Must supply name for poll"]
+    },
+    description: {
+        type: String,        
+    },
+    options: {
+        type: [OptionSchema], 
+        validate: [
+            {
+                validator: function(optionArray) {
+                    return optionArray.every(val => val.option.length >= 1)
+                },
+                message: `Each option name must be 1 or more characters`
+            },
+            {
+                validator: function(optionArray) {
+                    return optionArray.length >= 2
+                },
+                message: `2 or more options must be provided`
+            }
+        ]
+    }
 })
+
+mongoose.model('Option', OptionSchema)
+console.log('Option Model Loaded');
 
 mongoose.model('Poll', PollSchema)
-console.log('Poll Model loaded');
+console.log('Poll Model Loaded');
+
+

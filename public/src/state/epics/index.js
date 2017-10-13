@@ -6,7 +6,9 @@ import {
 } from './authEpic';
 
 import {
-    pollCreateEpic
+    pollCreateEpic,
+    pollGetAllEpic,
+    pollSuccessfulCreateEpic
 } from './pollEpic'
 
 export default combineEpics(
@@ -15,4 +17,6 @@ export default combineEpics(
     userLoginEpic,
 
     pollCreateEpic,
+    pollGetAllEpic,
+    pollSuccessfulCreateEpic
 )
