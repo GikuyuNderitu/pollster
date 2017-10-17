@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Poll = mongoose.model('Poll')
 const Option = mongoose.model('Option')
+const {authenticateUser} = require('../config/utils')
 
 const parsePollRequestBody = requestBody => {
     const {options, name, description} = requestBody
@@ -8,7 +9,7 @@ const parsePollRequestBody = requestBody => {
     return {options, body}
 }
 
-const createPoll = ({name, description}, options) => new Poll({options, name, description})
+const createPoll = ({name, description}, options, owner) => new Poll({options, name, description, owner})
 
 const constructOptionArray = arr => 
     arr.map(option => new Option({option}))
@@ -17,18 +18,26 @@ module.exports = {
     create(req, res) {
         const {options, body} = parsePollRequestBody(req.body);
 
-        const poll = createPoll(body, constructOptionArray(options))
-
-        console.log(poll);
-
-        poll.save(err => {
-            if(err) {
-                console.log(err);
-                console.log(poll)
-                return res.status(402).json(err)
-            }
-
-            return res.status(201).json(poll)
+        authenticateUser(req, res)
+        .then((user) => {
+            console.log(user);
+            const {_id} = user;
+            const poll = createPoll(body, constructOptionArray(options), _id)
+    
+            console.log(poll);
+    
+            poll.save(err => {
+                if(err) {
+                    console.log(err);
+                    console.log(poll)
+                    return res.status(402).json(err)
+                }
+    
+                res.status(201).json(poll)
+            })
+        })
+        .catch(({httpCode, error}) => {
+            res.status(httpCode).json({error})
         })
     },
     getAll(req, res) {
