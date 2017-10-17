@@ -40,8 +40,29 @@ const PollSchema = new Schema({
                 message: `2 or more options must be provided`
             }
         ]
+    },
+    owner: {
+        type: Schema.Types.ObjectId, 
+        ref: 'User'
     }
 })
+
+PollSchema.methods.vote = function(id) {
+    console.log(id);
+    const idx = this.options.findIndex( option => {
+        console.log(option._id+ ' === ' + id);
+
+        console.log(typeof option._id);
+        console.log(typeof id);
+        return option._id.toString() === id
+    })
+
+    console.log(idx);
+
+    if(idx !== -1) this.options[idx].votes++
+
+    return idx !== -1
+}
 
 mongoose.model('Option', OptionSchema)
 console.log('Option Model Loaded');

@@ -55,3 +55,26 @@ export const times = (num, arr=[]) => {
     }
     return arr
 }
+
+export const MOCK_POLL = {
+    name: 'Mock Poll',
+    description: '',
+    options: [
+        {
+            option: 'Option 1',
+            votes: 2
+        },
+        {
+            option: 'Option 2',
+            votes: 6
+        },
+        {
+            option: 'Option 3',
+            votes: 8
+        },
+        {
+            option: 'Option 4',
+            votes: 1
+        },
+    ]
+}

@@ -20,13 +20,24 @@ const Hero = (props) => (
         zDepth={1}
         style={heroStyle}>
         <h1>{'Pollster'}</h1>
-        <div className="Home-Hero-buttons">
+        {props.isAuthenticated ? 
+            <div className="Home-Hero-buttons">
+                <RaisedButton
+                    primary
+                    label="Checkout Polls"
+                    containerElement={<Link to="/polls" />} />
+                <RaisedButton
+                    label="Logout"
+                    containerElement={<Link to="/logout" />} />
+            </div>
+             : <div className="Home-Hero-buttons">
+
             <RaisedButton
                 containerElement={<Link to={'/signin'} />}>{"Sign In"}</RaisedButton>
             <RaisedButton
                 primary
                 containerElement={<Link to={'/signup'} />}>{"Sign Up!"}</RaisedButton>
-        </div>
+        </div>}
     </Paper>
 )
 
@@ -43,11 +54,15 @@ class Home extends Component {
     render() {
         return (
             <main className="Home">
-                <Hero />
+                <Hero isAuthenticated={this.props.isAuthenticated} />
                 <Adverts />
             </main>
         )
     }
 }
 
-export default Home;
+const mStP = ({auth}) => ({
+    isAuthenticated: auth.isAuthenticated
+})
+
+export default connect(mStP)(Home);

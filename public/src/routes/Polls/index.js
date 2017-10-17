@@ -1,16 +1,25 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
 
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+
+import {cyan400, amberA400, pink400, greenA100, teal100, blueA100, orangeA200, purpleA100} from 'material-ui/styles/colors'
 import {Card, CardHeader, CardTitle, CardText, CardMedia, CardActions} from 'material-ui/Card'
 import Divider from 'material-ui/Divider'
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import {RadioButtonGroup, RadioButton} from 'material-ui/RadioButton'
+import TextField from 'material-ui/TextField'
 import AddQuote from '../../components/AddQuote';
 import './Polls.css'
+import {times} from '../../utils'
 
-import {handlePollGetAttempt} from '../../state/actions/pollAction'
+import {Doughnut} from 'react-chartjs-2'
+
+import {
+    handlePollGetAttempt,
+    handleOptionCreateAttempt
+} from '../../state/actions/pollAction'
 
 const pollStyle = {
     margin: '20px 10px',
@@ -18,23 +27,105 @@ const pollStyle = {
     textAlign: 'left'
 }
 
+const COLORS = [
+    cyan400,
+    amberA400,
+    pink400,
+    greenA100,
+    teal100,
+    blueA100,
+    orangeA200,
+    purpleA100,
+]
+
+const getColors = num => 
+    times(num).map((val, idx, arr) => {
+        return COLORS[val]
+    })
+
+const getRandomColor = () => COLORS[Math.floor(Math.random()*COLORS.length)]
 
 
-const times = (num, arr=[]) => {
-    for(let i = 0; i < num; i++) {
-        arr.push(i)
-    }
-    return arr
-}
+const transformPollData = (name, options, colors) => ({
+    labels: options.map(({option}) => option),
+    datasets: [{
+        data: options.map(({votes}) => votes),
+        label: name,
+        backgroundColor: getColors(options.length)
+    }]
 
-// const Option = (props) => (
-
-// )
+})
 
 class Poll extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedOption: ''
+        }
+
+        this.ws = undefined
+
+        this.sendOption = this.sendOption.bind(this);
+        this.expandedChanged = this.expandedChanged.bind(this);
+        this.initSocket = this.initSocket.bind(this);
+        this.destroySocket = this.destroySocket.bind(this);
+        this.setWebSocket = this.setWebSocket.bind(this);
+        this.voteViaSocket = this.voteViaSocket.bind(this);
+    }
+
+    voteViaSocket(data) {
+        this.ws.send(JSON.stringify(data))
+    }
+
+    sendOption() {
+        const optionData = {
+            poll_id: this.props.id,
+            option_id: this.state.selectedOption
+        }
+        this.voteViaSocket(optionData)
+        this.props.sendOption(optionData)
+    }
+
+    initSocket() {
+        if(this.ws !== undefined) {console.log('did a hard cancel');return;}
+
+        this.ws = new WebSocket(`ws://localhost:1337/${this.props.id}`)
+        this.ws.onopen = (e) => {
+            // console.log(e);
+        }
+
+        this.ws.onmessage = (srv) => {
+            console.log('Message ', JSON.parse(srv.data));
+        }
+    }
+
+    destroySocket() {
+        this.ws.close()
+    }
+
+    expandedChanged() {
+        const expandedId = this.props.expanded ? '' : this.props.id
+        this.props.setExpanded(expandedId)
+        this.setWebSocket()
+    }
+
+    setWebSocket() {
+        setTimeout(() => {
+            const expanded = this.props.expanded
+            if(expanded) {
+                console.log('initialize socket');
+                this.initSocket()
+            } else {
+                this.destroySocket()
+            }
+        }, 0)
+    }
+
     render() {
         return (
             <Card
+                onExpandChange={this.expandedChanged}
+                expanded={this.props.expanded}
                 style={pollStyle}>
                 <CardHeader
                     actAsExpander={true}
@@ -44,13 +135,25 @@ class Poll extends Component {
                     expandable={true} 
                     title={this.props.name} 
                     subtitle={this.props.description} />
-                <CardText
-                    expandable={true}>
 
-                </CardText>
+                <CardMedia
+                    expandable={true}>
+{/*                    <ReactCSSTransitionGroup
+                        transitionName="poll-chart-transition" 
+                        transitionAppear={true}
+                        transitionEnter={false}
+                        transitionLeave={false}
+transitionAppearTimeout={100} >*/}
+                        <Doughnut 
+                            data={transformPollData(this.props.name, this.props.options)}
+                            height={125} />
+{/*</ReactCSSTransitionGroup>*/}
+                </CardMedia>
                 <CardActions
                     expandable={true} >
                     <RadioButtonGroup
+                        valueSelected={this.state.selectedOption}
+                        onChange={(e, selectedOption) => this.setState({selectedOption})}
                         className="Poll-RadioButton-Container"
                         name={`Poll_${this.props.id}_selection`} >
                         {this.props.options.map(({option, _id, votes}, idx) => (
@@ -58,11 +161,12 @@ class Poll extends Component {
                                 style={{width: 'auto', margin: '2px 10px'}}
                                 key={idx}
                                 label={option}
-                                value={option}
+                                value={_id}
                                 votes={votes} />
                         ))}
                     </RadioButtonGroup>
                     <RaisedButton
+                        onClick={this.sendOption}
                         primary={true}
                         style={{margin: '10px'}}
                         label="Select Option" />
@@ -72,33 +176,63 @@ class Poll extends Component {
     }
 }
 
-// const Poll = (this.props) => 
-
 class Polls extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            expanded: '',
+            searchBy: ''
+        }
+
+        this.setExpanded = this.setExpanded.bind(this)
+    }
+
+    setExpanded(expanded) {
+        this.setState({expanded})
+    }
     componentDidMount() {
         this.props.getPolls()
     }
     render() {
-        console.log(this.props.polls);
+        const polls = this.props.polls
+            .filter(({name}) => name.toLowerCase().includes(this.state.searchBy.toLowerCase()))
+            .map(({_id, name, description, options}, idx) => (
+                <Poll
+                    expanded={this.state.expanded === _id}
+                    setExpanded={this.setExpanded}
+                    sendOption={this.props.selectOption}
+                    id={_id}
+                    key={idx}
+                    name={name}
+                    description={description}
+                    options={options} />
+            ))
         return (
             <main className="Polls">
                 <h1>Polls</h1>
-                <AddQuote />
-                {this.props.polls.map(({_id, name, description, options}, idx) => (
-                    <Poll
-                        id={_id}
-                        key={idx}
-                        name={name}
-                        description={description}
-                        options={options} />
-                ))}
+                <TextField
+                    floatingLabelText="Search for a Poll"
+                    onChange={(e, searchBy) => this.setState({searchBy})} />
+                {this.props.isAuthenticated ? <AddQuote /> : null}
+
+                <ReactCSSTransitionGroup
+                    transitionName="allPolls"
+                    transitionEnter={true}
+                    transitionLeave={true}
+                    transitionEnterTimeout={200}
+                    transitionLeaveTimeout={500} >
+                    {polls}
+                </ReactCSSTransitionGroup>
+
 
             </main>
         )
     }
 }
 
-const mStP = ({poll}) => ({
+
+const mStP = ({poll, auth}) => ({
+    isAuthenticated: auth.isAuthenticated,
     polls: poll.polls,
     pollError: poll.pollError
 })
@@ -106,6 +240,9 @@ const mStP = ({poll}) => ({
 const mDtP = dispatch => ({
     getPolls() {
         dispatch(handlePollGetAttempt())
+    },
+    selectOption(payload) {
+        dispatch(handleOptionCreateAttempt(payload))
     }
 })
 

@@ -37,9 +37,27 @@ module.exports = {
                 return res.status(400).json({error: err})
             }
 
-            console.log(polls);
-
             res.json(polls)
+        })
+    },
+    vote(req, res) {
+        const {id} = req.params
+        const {option} = req.body
+        Poll.findById(id, (err, poll) => {
+            if(err) {
+                console.log(err);
+                return res.status(403).json(err)
+            }
+            const didVote = poll.vote(option)
+            if(!didVote) return res.status(404).json({error: 'Option Not found'})
+            poll.save(err => {
+                if(err) {
+                    console.log(err);
+                    return res.status(500).json(err)
+                }
+
+                res.status(201).json(poll)
+            })
         })
     }
 }

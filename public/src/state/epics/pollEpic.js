@@ -1,8 +1,13 @@
 import {
     POLL_CREATE_ATTEMPT,
+    // POLL_CREATE_FAILURE,
+    POLL_CREATE_SUCCESS,
+
     POLL_GET_ATTEMPT,
-    POLL_CREATE_FAILURE,
-    POLL_CREATE_SUCCESS
+
+    OPTION_CREATE_ATTEMPT,
+    OPTION_CREATE_SUCCESS,
+    // OPTION_CREATE_FAILURE,
 } from '../actions/types'
 
 import {
@@ -11,7 +16,10 @@ import {
 
     handlePollGetAttempt,
     handlePollGetSuccess,
-    handlePollGetFailure
+    handlePollGetFailure,
+
+    handleOptionCreateSuccess,
+    handleOptionCreateFailure,
 } from '../actions/pollAction'
 
 import {Observable} from 'rxjs/Observable'
@@ -39,4 +47,16 @@ export const pollGetAllEpic = (action$_, store) =>
 
 export const pollSuccessfulCreateEpic = (action$_, store) =>
     action$_.ofType(POLL_CREATE_SUCCESS)
+        .map(() => handlePollGetAttempt())
+
+export const optionCreateEpic = (action$_, store) =>
+    action$_.ofType(OPTION_CREATE_ATTEMPT)
+        .mergeMap(({payload}) => 
+            Observable.fromPromise(fetchPost(`/api/polls/${payload.poll_id}`, {option: payload.option_id}))
+                .map(response => handleOptionCreateSuccess(response))
+                .catch(err => Observable.of(handleOptionCreateFailure(err)))
+        )
+
+export const optionSuccessfulCreateEpic = (action$_, store) => 
+    action$_.ofType(OPTION_CREATE_SUCCESS)
         .map(() => handlePollGetAttempt())

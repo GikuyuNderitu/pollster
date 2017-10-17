@@ -3,9 +3,10 @@ const mongoose = require('mongoose'),
     bcrypt = require('bcrypt'),
     PASSWORD_REGEX = /^.{8,}$/
 
-const saltRounds = 14
+const saltRounds = 14,
+      Schema = mongoose.Schema;
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
     username: {
         type: String,
         required:[true, "Username is required"],
@@ -31,8 +32,11 @@ const UserSchema = new mongoose.Schema({
             },
             message: "The password and password confirmation don't match"
         }]
-    }
-
+    },
+    _polls: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Poll'
+    }]
 }, {
     timestamps: {
         createdAt: 'created_at',

@@ -6,3 +6,46 @@
 .Poll-RadioButton-Container > * {
     width: auto;
 }
+
+.allPolls-enter {
+    transform: translateX(-101%);
+    transition: transform 200ms ease-in;
+}
+
+
+.allPolls-enter.allPolls-enter-active {
+    transform: translateX(0)
+}
+
+.allPolls-leave {
+    transform: translateX(0);
+    transition: transform 200ms ease-out;
+}
+.allPolls-leave.allPolls-leave-active {
+    transform: translateX(101%);
+}
+/* 
+.poll-chart-transition-enter {
+    opacity: 0.01;
+    transition: opacity 100ms ease-in;
+}
+
+.poll-chart-transition-enter.poll-chart-transition-enter-active {
+    opacity: 1;
+}
+
+.poll-chart-transition-leave {
+    opacity: 1;
+    transition: opacity 100ms ease-in;    
+}
+.poll-chart-transition-leave.poll-chart-transition-leave-active {
+    opacity: 0.01;
+} */
+
+.poll-chart-transition-appear {
+    opacity: 0.01;
+    transition: opacity 100ms ease-in;
+}
+.poll-chart-transition-appear.poll-chart-transition-appear-active {
+    opacity: 1;
+}

@@ -8,7 +8,10 @@ import {
 import {
     pollCreateEpic,
     pollGetAllEpic,
-    pollSuccessfulCreateEpic
+    pollSuccessfulCreateEpic,
+
+    optionCreateEpic,
+    optionSuccessfulCreateEpic
 } from './pollEpic'
 
 export default combineEpics(
@@ -18,5 +21,8 @@ export default combineEpics(
 
     pollCreateEpic,
     pollGetAllEpic,
-    pollSuccessfulCreateEpic
+    pollSuccessfulCreateEpic,
+
+    optionCreateEpic,
+    optionSuccessfulCreateEpic
 )

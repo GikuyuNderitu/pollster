@@ -17,3 +17,7 @@ export const POLL_CREATE_FAILURE = 'Create Poll Failed'
 export const POLL_GET_ATTEMPT = 'Get All Polls Attempt Occurred'
 export const POLL_GET_SUCCESS = 'Get All Polls Success Occurred'
 export const POLL_GET_FAILURE = 'Get All Polls Failure Occurred'
+
+export const OPTION_CREATE_ATTEMPT = 'Option Create Attempt Occurred'
+export const OPTION_CREATE_SUCCESS = 'Option Create Success Occurred'
+export const OPTION_CREATE_FAILURE = 'Option Create Failure Occurred'

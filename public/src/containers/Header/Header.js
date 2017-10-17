@@ -4,7 +4,7 @@ import './Header.css';
 
 import {Link} from 'react-router-dom'
 
-import {blue500} from 'material-ui/styles/colors';
+import {blue500, blueGrey500} from 'material-ui/styles/colors';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
@@ -13,6 +13,7 @@ import HomeIcon from 'material-ui/svg-icons/action/home'
 import DescIcon from 'material-ui/svg-icons/action/description'
 import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import ClearIcon from 'material-ui/svg-icons/content/clear';
 import PencilIcon from 'material-ui/svg-icons/content/create';
 import AddIcon from 'material-ui/svg-icons/content/add';
 import MenuItem from 'material-ui/MenuItem'
@@ -94,6 +95,7 @@ class Header extends Component {
                                     onClick={this.toggleSideNav}
                                     primaryText="Home" />
                                 <Divider />
+                                
                                 <MenuItem
                                     rightIcon={<DescIcon color="goldenrod" />}
                                     containerElement={<Link to="/polls" />}
@@ -107,13 +109,13 @@ class Header extends Component {
                                     primaryText="Sign Up" />
                                 <Divider />
                                 <MenuItem 
-                                    rightIcon={<PencilIcon color="#d21" />}
+                                    rightIcon={<PencilIcon color={blueGrey500} />}
                                     containerElement={<Link to="/signin" />}
                                     onClick={this.toggleSideNav}
                                     primaryText="Sign In" />
                                 <Divider />
                                 <MenuItem 
-                                    rightIcon={<PencilIcon color="#d21" />}
+                                    rightIcon={<ClearIcon color="#d21" />}
                                     containerElement={<Link to="/logout" />}
                                     onClick={this.toggleSideNav}
                                     primaryText="Logout" />

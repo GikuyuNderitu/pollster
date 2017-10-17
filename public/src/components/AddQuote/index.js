@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import {Card, CardHeader, CardText, CardActions} from 'material-ui/Card';
 import {List, ListItem} from 'material-ui/List';
 import {red600} from 'material-ui/styles/colors'
-import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
@@ -44,11 +43,6 @@ const optionListStyle = {
     maxWidth: '360px',
     textAlign: 'left'
 }
-
-const NewOption = (props) => (
-    <div>
-    </div>
-)
 
 class NewPoll extends Component {
     constructor(props) {
@@ -94,7 +88,7 @@ class NewPoll extends Component {
     }
 
     checkFormValidity() {
-        const {newOptionError, nameError, validForm, options, name} = this.state
+        const {newOptionError, nameError, options, name} = this.state
         
         if(newOptionError.length === 0 && nameError.length === 0 && name.length >= 3 && options.length >1) {
             this.setState({validForm: true})
