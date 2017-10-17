@@ -1,3 +1,7 @@
+.Polls {
+    max-width: 800px;
+    margin: 0 auto;
+}
 .Poll-RadioButton-Container {
     display: flex;
     flex-flow: row wrap;

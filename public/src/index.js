@@ -9,12 +9,14 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
+import {lightBlue500, lightGreen900} from 'material-ui/styles/colors';
 import MTP from 'material-ui/styles/MuiThemeProvider';
 import gMT from 'material-ui/styles/getMuiTheme'
 
 const muiTheme = gMT({
     palette: {
-        primary1Color: '#0196df',
+        primary1Color: lightBlue500,
+        accent1Color: lightGreen900
     },
     raisedButton: {
         primaryTextColor: '#eee',
