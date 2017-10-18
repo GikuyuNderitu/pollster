@@ -41,10 +41,7 @@ const PollSchema = new Schema({
             }
         ]
     },
-    owner: {
-        type: Schema.Types.ObjectId, 
-        ref: 'User'
-    }
+    owner: {type: Schema.Types.ObjectId, ref: 'User', required: true}
 })
 
 PollSchema.methods.vote = function(id) {

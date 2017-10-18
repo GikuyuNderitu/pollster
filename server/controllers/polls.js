@@ -19,9 +19,10 @@ module.exports = {
         const {options, body} = parsePollRequestBody(req.body);
 
         authenticateUser(req, res)
-        .then((user) => {
-            console.log(user);
+        .then(({user}) => {
+            console.log('From Then ',user);
             const {_id} = user;
+            console.log(_id);
             const poll = createPoll(body, constructOptionArray(options), _id)
     
             console.log(poll);
@@ -41,7 +42,7 @@ module.exports = {
         })
     },
     getAll(req, res) {
-        Poll.find({}, (err, polls) => {
+        Poll.find({}).populate('owner').exec((err, polls) => {
             if(err) {
                 return res.status(400).json({error: err})
             }
