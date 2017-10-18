@@ -59,23 +59,23 @@ class SignUp extends Component {
                         <TextField
                             value={this.state.displayName}
                             floatingLabelText="Display Name"
-                            onChange={(e, nVal) => this.setState({displayName: nVal})} 
+                            onChange={(e, nVal) => {this.setState({displayName: nVal}); this.checkFormValidation()}} 
                             onBlur={this.checkFormValidation} />
                         <TextField
                             value={this.state.username}
                             floatingLabelText="Username"
-                            onChange={(e, nVal) => this.setState({username: nVal})} 
+                            onChange={(e, nVal) => {this.setState({username: nVal}); this.checkFormValidation()}} 
                             onBlur={this.checkFormValidation} />
                         <TextField
                             value={this.state.password} 
                             floatingLabelText="Password"
-                            onChange={(e, nVal) => this.setState({password: nVal})} 
+                            onChange={(e, nVal) => {this.setState({password: nVal}); this.checkFormValidation()}} 
                             onBlur={this.checkFormValidation} />
                         
                         <TextField
                             value={this.state.password_confirmation} 
                             floatingLabelText="Confirm Password"
-                            onChange={(e, nVal) => this.setState({password_confirmation: nVal})} 
+                            onChange={(e, nVal) => {this.setState({password_confirmation: nVal}); this.checkFormValidation()}} 
                             onBlur={this.checkFormValidation} />
 
                         <RaisedButton 

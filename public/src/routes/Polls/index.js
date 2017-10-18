@@ -38,6 +38,8 @@ const COLORS = [
     purpleA100,
 ]
 
+const getOwnerName = owner => owner.displayName || owner.username
+
 const getColors = num => 
     times(num).map((val, idx, arr) => {
         return COLORS[val]
@@ -130,7 +132,8 @@ class Poll extends Component {
                 <CardHeader
                     actAsExpander={true}
                     showExpandableButton={true}
-                    title={this.props.name} />
+                    title={this.props.name}
+                    subtitle={`Poll By: ${getOwnerName(this.props.owner)}`} />
                 <CardTitle 
                     expandable={true} 
                     title={this.props.name} 
@@ -196,9 +199,10 @@ class Polls extends Component {
     render() {
         const polls = this.props.polls
             .filter(({name}) => name.toLowerCase().includes(this.state.searchBy.toLowerCase()))
-            .map(({_id, name, description, options}, idx) => (
+            .map(({_id, name, description, options, owner}, idx) => (
                 <Poll
                     expanded={this.state.expanded === _id}
+                    owner={owner}
                     setExpanded={this.setExpanded}
                     sendOption={this.props.selectOption}
                     id={_id}

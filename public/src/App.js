@@ -30,6 +30,9 @@ class Logout extends Component {
   }
 }
 
+// Finish this action which will allow component to dispatch a logout action
+// const LogoutWrapper = connect()
+
 class App extends Component {
   componentDidMount() {
     this.props.attemptAuth()
@@ -45,6 +48,7 @@ class App extends Component {
               <Route path="/polls" component={PollsRoute}/>
               <Route path="/signup" component={SignupRoute}/>
               <Route path="/signin" component={SigninRoute}/>
+              <Route path="/user/:username" component={SignupRoute}/>
               <Route path="/logout" component={Logout}/>
             </Switch>
           </div>
