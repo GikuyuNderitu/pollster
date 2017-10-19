@@ -7,11 +7,8 @@ module.exports = {
     login(req, res) {
         const body = req.body;
         User.findOne({username: body.username}, (err, user) => {
-            if(err || !user) {
-                console.log(err);
-                console.log(user);
-                console.log('hit if');
-                return res.status(404).json(err)
+            if(!err && !user) {
+                return res.status(404).json({error: 'User not found'})
             }
             
             console.log('never hit line 14');

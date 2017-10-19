@@ -10,6 +10,8 @@ export const REGISTER_ATTEMPT = 'Registration Attempt Occurred'
 export const REGISTER_SUCCESS = 'Registration Success Occurred'
 export const REGISTER_FAILURE = 'Registration Failure Occurred'
 
+export const USER_LOGOUT = 'User Logged Out'
+
 export const POLL_CREATE_ATTEMPT = 'Create Poll Attempted'
 export const POLL_CREATE_SUCCESS = 'Create Poll Succeeded'
 export const POLL_CREATE_FAILURE = 'Create Poll Failed'

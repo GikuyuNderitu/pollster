@@ -9,7 +9,7 @@ exports.sanitizeUser = ({displayName, username, _id}) => ({displayName, username
 exports.authenticateUser = (req, res) => 
     new Promise((resolve, reject) => {
         const authCookie = req.cookies.Authorization
-        if (authCookie === undefined) return reject({httpCode: 400, error: "Not logged in"})
+        if (authCookie === undefined) return reject({httpCode: 416, error: "Not logged in"})
         
         const token = authCookie.split(" ")[1]
     

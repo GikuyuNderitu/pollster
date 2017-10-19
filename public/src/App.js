@@ -11,14 +11,22 @@ import HomeRoute from './routes/Home'
 import SignupRoute from './routes/Signup'
 import SigninRoute from './routes/Signin'
 import PollsRoute from './routes/Polls'
-
+import {handleLogout} from './state/actions/authAction'
 import './App.css';
 
 class Logout extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      redirect: false
+    }
+  }
   componentWillMount() {
     axios.get('/api/authenticate/logout')
     .then(data => {
       console.log(data);
+      this.setState({redirect: true});
+      this.props.logout()
     })
     .catch(err => {
       console.error(err)
@@ -26,12 +34,11 @@ class Logout extends Component {
   }
 
   render() {
-    return <Redirect to="/" />
+    return this.state.redirect ? <Redirect to="/" /> : null
   }
 }
 
-// Finish this action which will allow component to dispatch a logout action
-// const LogoutWrapper = connect()
+const LogoutWrapper = connect(null, (dispatch)=>({logout(){ dispatch(handleLogout())}}))(Logout)
 
 class App extends Component {
   componentDidMount() {
@@ -49,7 +56,7 @@ class App extends Component {
               <Route path="/signup" component={SignupRoute}/>
               <Route path="/signin" component={SigninRoute}/>
               <Route path="/user/:username" component={SignupRoute}/>
-              <Route path="/logout" component={Logout}/>
+              <Route path="/logout" component={LogoutWrapper}/>
             </Switch>
           </div>
         </Router>

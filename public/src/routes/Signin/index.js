@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom';
 import TextField from 'material-ui/TextField'
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
-
+import Snackbar from 'material-ui/Snackbar'
 import SendIcon from 'material-ui/svg-icons/content/send'
 
 import {handleLoginAttempt} from '../../state/actions/authAction'
@@ -13,7 +13,8 @@ import './Signin.css'
 
 const initialState = {
     username: '',
-    password: ''
+    password: '',
+    snackbarOpen: false
 }
 
 const paperStyle = {
@@ -27,6 +28,8 @@ class Signin extends Component {
         this.state = {...initialState}
 
         this.counter = 0;
+        this.snackTimer = undefined;
+        this.renderSnackBar = this.renderSnackBar.bind(this);
     }
     handleSubmit(e) {
         e.preventDefault()
@@ -38,6 +41,13 @@ class Signin extends Component {
     resetState() {
         this.setState(initialState)
     }
+
+    renderSnackBar() {
+        this.snackTimer = setTimeout(() => {
+            this.setState({snackbarOpen: false})
+        }, 4000)
+    }
+
     render() {
         return (
             !this.props.isAuthenticated ?
@@ -69,6 +79,7 @@ class Signin extends Component {
                             onClick={e => this.handleSubmit(e)} />
                     </form>
                 </Paper>
+                
             </main> :
             <Redirect to="/polls"/>
         )
@@ -76,7 +87,8 @@ class Signin extends Component {
 }
 
 const mStP = ({auth}) => ({
-    isAuthenticated: auth.isAuthenticated
+    isAuthenticated: auth.isAuthenticated,
+    authError: auth.authError
 })
 
 const mDtP = dispatch => ({

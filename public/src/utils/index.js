@@ -25,7 +25,6 @@ const addBody = (options, body) => ({
 
 const parseData = response => {
     if (!response.ok) {
-        console.error("Error Occurred");
         return response.json().then(err => Promise.reject(err))
     }
     
