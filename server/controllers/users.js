@@ -45,14 +45,16 @@ module.exports = {
         })
     },
     getUser(req, res) {
-        const {id} = req.params;
-        User.findById(id).populate('polls').exec((err, user) => {
+        const {username} = req.params;
+        console.log(username);
+        User.findOne({username}).populate('_polls').exec((err, user) => {
             if(err || !user) {
                 return res.status(400).json({error: 'The User was not found'})
             }
-            const {displayName, username, _polls} = user;
+            console.log(user);
+            const {displayName, username, _polls, _id} = user;
             const name = displayName || username;
-            const sanitizedUser = {name, polls: _polls, id}
+            const sanitizedUser = {name, polls: _polls, _id}
 
             res.json(sanitizedUser)
         })

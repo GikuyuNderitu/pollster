@@ -28,6 +28,7 @@ const UserSchema = new Schema({
             message: "`{ VALUE }` is not a valid password"
         },{
             validator: function (pass) {
+                if(!this.isNew) return true
                 return pass === this.password_confirmation
             },
             message: "The password and password confirmation don't match"
@@ -55,7 +56,7 @@ UserSchema.methods.login = function (password) {
 	})
 }
 
-UserSchema.pre('save', function (next) {
+UserSchema.post('validate', function (next) {
     let self = this
     console.log(self);
 	bcrypt.hash(self.password, saltRounds)

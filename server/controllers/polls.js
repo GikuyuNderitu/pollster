@@ -24,17 +24,25 @@ module.exports = {
             const {_id} = user;
             console.log(_id);
             const poll = createPoll(body, constructOptionArray(options), _id)
-    
-            console.log(poll);
-    
+
+            console.log(user);
+
+            user._polls.push(poll._id)
+            
             poll.save(err => {
                 if(err) {
                     console.log(err);
                     console.log(poll)
-                    return res.status(402).json(err)
+                    return res.status(404).json(err)
                 }
-    
-                res.status(201).json(poll)
+                
+                user.save(err => {
+                    if(err) {
+                        console.log(err);
+                        return res.status(404).json(err)
+                    }
+                    res.status(201).json(poll)
+                })
             })
         })
         .catch(({httpCode, error}) => {
