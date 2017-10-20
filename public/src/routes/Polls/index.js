@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
-import {cyan400, amberA400, pink400, greenA100, teal100, blueA100, orangeA200, purpleA100} from 'material-ui/styles/colors'
+import {cyan400, amberA400, pink400, greenA100, teal100, blueA100, orangeA200, purpleA100, redA100,red800} from 'material-ui/styles/colors'
 import {Card, CardHeader, CardTitle, CardText, CardMedia, CardActions} from 'material-ui/Card'
 import Divider from 'material-ui/Divider'
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import {RadioButtonGroup, RadioButton} from 'material-ui/RadioButton'
+import FlatButton from 'material-ui/FlatButton'
+import ClearIcon from 'material-ui/svg-icons/content/clear'
 import TextField from 'material-ui/TextField'
 import AddQuote from '../../components/AddQuote';
 import './Polls.css'
@@ -58,7 +61,7 @@ const transformPollData = (name, options, colors) => ({
 
 })
 
-class Poll extends Component {
+export class Poll extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -124,6 +127,7 @@ class Poll extends Component {
     }
 
     render() {
+        console.log(this.props);
         return (
             <Card
                 onExpandChange={this.expandedChanged}
@@ -152,6 +156,11 @@ transitionAppearTimeout={100} >*/}
                             height={125} />
 {/*</ReactCSSTransitionGroup>*/}
                 </CardMedia>
+
+                <CardText
+                    expandable={true} >
+                    {this.props.description} --- Check out <Link to={`/user/${this.props.owner.username}`}>{getOwnerName(this.props.owner)}</Link>
+                </CardText>
                 <CardActions
                     expandable={true} >
                     <RadioButtonGroup
@@ -168,11 +177,23 @@ transitionAppearTimeout={100} >*/}
                                 votes={votes} />
                         ))}
                     </RadioButtonGroup>
-                    <RaisedButton
-                        onClick={this.sendOption}
-                        primary={true}
-                        style={{margin: '10px'}}
-                        label="Select Option" />
+                    <div className="Poll-Action-Buttons">
+                        <RaisedButton
+                            onClick={this.sendOption}
+                            primary={true}
+                            style={{margin: '10px'}}
+                            label="Select Option" />
+                        {this.props.canEdit ? 
+                            <FlatButton
+                                backgroundColor={red800}
+                                hoverColor={red800}
+                                rippleColor={redA100}
+                                label="Delete Poll"
+                                labelPosition="after"
+                                labelStyle={{color: "#fff"}}
+                                icon={<ClearIcon color="white" />} >
+                            </FlatButton> : null}
+                    </div>
                 </CardActions>
             </Card>
         )
@@ -199,13 +220,14 @@ class Polls extends Component {
     render() {
         const polls = this.props.polls
             .filter(({name}) => name.toLowerCase().includes(this.state.searchBy.toLowerCase()))
-            .map(({_id, name, description, options, owner}, idx) => (
+            .map(({_id, name, description, options, owner, canEdit}, idx) => (
                 <Poll
                     expanded={this.state.expanded === _id}
                     owner={owner}
                     setExpanded={this.setExpanded}
                     sendOption={this.props.selectOption}
                     id={_id}
+                    canEdit={canEdit}
                     key={idx}
                     name={name}
                     description={description}

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import { SmallScreen, Desktop } from '../../common/Responsive';
 import './Header.css';
 
@@ -33,11 +34,35 @@ const Nav = (props) => (
     </nav>
 )
 
-const DesktopNav = () => (
-    <nav>
-        <FlatButton />
-        <FlatButton />
-        <FlatButton />
+const DesktopNav = ({isAuthenticated}) => (
+    <nav className="Nav-desktop">
+        {isAuthenticated ? 
+            <FlatButton
+                label="Logout"
+                containerElement={
+                    <Link to="/logout" />
+                } />
+            : 
+            <FlatButton
+                label="Sign In"
+                containerElement={
+                    <Link to="/signin" />
+                } />}
+        <ToolbarSeparator />
+
+        <RaisedButton
+            style={{margin: '0 20px'}}
+            secondary={true}
+            containerElement={<Link to="/" />}
+            label="Home" />
+
+        <ToolbarSeparator />
+
+        <RaisedButton
+            style={{margin: '0 20px'}}
+            secondary={true}
+            containerElement={<Link to="/polls" />}
+            label="Checkout The Polls!" />
     </nav>
 )
 
@@ -67,28 +92,7 @@ class Header extends Component {
                         lastChild={true}
                         style={endToolBarStyle} >
                         <Desktop>
-                            <nav className="Nav-desktop">
-                                <FlatButton
-                                    label="Sign In"
-                                    containerElement={
-                                        <Link to="/signin" />
-                                    } />
-                                <ToolbarSeparator />
-
-                                <RaisedButton
-                                    style={{margin: '0 20px'}}
-                                    secondary={true}
-                                    containerElement={<Link to="/" />}
-                                    label="Home" />
-
-                                <ToolbarSeparator />
-
-                                <RaisedButton
-                                    style={{margin: '0 20px'}}
-                                    secondary={true}
-                                    containerElement={<Link to="/polls" />}
-                                    label="Checkout The Polls!" />
-                            </nav>
+                            <DesktopNav isAuthenticated={this.props.isAuthenticated} />
                         </Desktop>
                         <SmallScreen>
                             <Nav toggleSideNav={this.toggleSideNav}/>
@@ -154,4 +158,8 @@ class Header extends Component {
     }
 }
 
-export default muiThemeable()(Header);
+const mStP = ({auth}) => ({
+    isAuthenticated: auth.isAuthenticated
+})
+
+export default connect(mStP)(muiThemeable()(Header));

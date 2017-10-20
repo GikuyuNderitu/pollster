@@ -26,7 +26,7 @@
     transition: transform 200ms ease-out;
 }
 .allPolls-leave.allPolls-leave-active {
-    transform: translateX(101%);
+    transform: translateX(120%);
 }
 /* 
 .poll-chart-transition-enter {
@@ -52,4 +52,10 @@
 }
 .poll-chart-transition-appear.poll-chart-transition-appear-active {
     opacity: 1;
+}
+
+.Poll-Action-Buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around
 }

@@ -20,7 +20,8 @@ const muiTheme = gMT({
     },
     raisedButton: {
         primaryTextColor: '#eee',
-        secondaryColor: '#aaa'
+        secondaryColor: '#fff',
+        secondaryTextColor: lightBlue500
     },
     toolbar: {
         // backgroundColor: "#06d",
