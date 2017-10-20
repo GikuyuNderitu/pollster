@@ -13,7 +13,7 @@ const router = express.Router()
 router.get('/', (req, res, next) => {
     authenticateUser(req, res)
     .then(data => {
-        console.log(data);
+        res.json(true)
     })
     .catch(err => {
         console.log(err);

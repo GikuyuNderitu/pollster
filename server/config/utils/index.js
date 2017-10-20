@@ -12,12 +12,12 @@ exports.authenticateUser = (req, res) =>
         if (authCookie === undefined) return reject({httpCode: 416, error: "Not logged in"})
         
         const token = authCookie.split(" ")[1]
-    
-    
+
+
         if(token) {
             jwt.verify(token, JWT_SECRET, (err, payload) => {
                 if(err) return res.status(401).json({error: 'Authentication error.'});
-    
+
                 User.findById(payload._id, (err, user) => {
                     if(err) {
                         res.clearCookie('Authorization');
@@ -32,3 +32,21 @@ exports.authenticateUser = (req, res) =>
             reject({httpCode: 404, error:"Authentication token not provided. Please login."})
         }
     })
+
+
+exports.sanitizePolls = (polls, req, res) => 
+    exports.authenticateUser(req, res)
+        .then(({user}) => 
+            polls.map(({owner, name, _id, description, options}) => 
+                    ({
+                        _id,
+                        name,
+                        description,
+                        options,
+                        owner: exports.sanitizeUser(owner),
+                        canEdit: owner._id.toString() === user._id.toString()
+                    }))
+        )
+        .catch(err => {
+            return err
+        })

@@ -11,9 +11,6 @@ module.exports = {
                 return res.status(404).json({error: 'User not found'})
             }
             
-            console.log('never hit line 14');
-
-            console.log(user);
             user.login(body.password)
             .then(() => {
                 const data = sanitizeUser(user)
@@ -40,6 +37,7 @@ module.exports = {
                 return res.status(404).json(err)
             }
             const data = sanitizeUser(user)
+            console.log(data);
             const token = setAuthToken(data)
             res.clearCookie('Authorization');
 			res.cookie('Authorization', token, {maxAge: 1000*86400*30, httpOnly: true})

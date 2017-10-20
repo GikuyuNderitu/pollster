@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Poll = mongoose.model('Poll')
 const Option = mongoose.model('Option')
-const {authenticateUser} = require('../config/utils')
+const {authenticateUser, sanitizePolls} = require('../config/utils')
 
 const parsePollRequestBody = requestBody => {
     const {options, name, description} = requestBody
@@ -47,7 +47,8 @@ module.exports = {
                 return res.status(400).json({error: err})
             }
 
-            res.json(polls)
+            sanitizePolls(polls, req, res)
+            .then(polls => res.json(polls))
         })
     },
     vote(req, res) {
