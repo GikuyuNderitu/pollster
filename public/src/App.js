@@ -11,6 +11,7 @@ import HomeRoute from './routes/Home'
 import SignupRoute from './routes/Signup'
 import SigninRoute from './routes/Signin'
 import PollsRoute from './routes/Polls'
+import UserRoute from './routes/User'
 import {handleLogout} from './state/actions/authAction'
 import './App.css';
 
@@ -55,7 +56,7 @@ class App extends Component {
               <Route path="/polls" component={PollsRoute}/>
               <Route path="/signup" component={SignupRoute}/>
               <Route path="/signin" component={SigninRoute}/>
-              <Route path="/user/:username" component={SignupRoute}/>
+              <Route path="/user/:username" component={UserRoute}/>
               <Route path="/logout" component={LogoutWrapper}/>
             </Switch>
           </div>

@@ -14,6 +14,10 @@ import {
     optionSuccessfulCreateEpic
 } from './pollEpic'
 
+import {
+    getUserEpic
+} from './userEpic'
+
 export default combineEpics(
     userAuthenticateEpic,
     userRegisterEpic,
@@ -24,5 +28,7 @@ export default combineEpics(
     pollSuccessfulCreateEpic,
 
     optionCreateEpic,
-    optionSuccessfulCreateEpic
+    optionSuccessfulCreateEpic,
+
+    getUserEpic
 )
